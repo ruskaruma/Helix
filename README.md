@@ -1,27 +1,35 @@
 # Helix
 
-A research-first, production-grade semantic search engine and vector similarity library implemented in modern C++ (C++20) with GPU acceleration, Python bindings, and deployable server components.
+Vector similarity search library in C++20.
 
-## Overview
+## Implemented
 
-Helix is a high-performance vector indexer and search engine designed for production use. It provides FAISS-like functionality with a focus on reproducibility, benchmarking, and systems engineering best practices.
+- IndexFlat (exact brute-force search)
+- L2, inner product, and cosine distance metrics
+- Parallel batch search
+- Index persistence (save/load)
 
-## Key Features
+## In Progress
 
-- **Performance**: Low-latency single-query p50 < 2ms for small indexes, GPU batched throughput > 50k qps on 1M vectors
-- **Recall**: Configurable ANN with recall@10 >= 0.95 on standard benchmarks
-- **Scalability**: Sharding and partitioning for >100M vectors with streaming ingest
-- **Engineering**: Robust CI, 80% unit coverage on core, reproducible benchmarks
-- **Usability**: Python SDK, CLI tools, and gRPC server for distributed queries
+- Dataset loaders and benchmarking infrastructure
 
-## Planned Index Types
+## Architecture
 
-- IndexFlatL2 (exact baseline)
-- IndexIVF (inverted file with kmeans coarse quantizer)
-- IndexPQ (product quantization storage)
-- IndexIVF+PQ (per-cluster PQ)
-- IndexHNSW (graph-based ANN)
-- IndexHybrid (coarse filter + HNSW rerank)
+```mermaid
+graph TD
+    A[User Application] --> B[IndexFlat]
+    B --> C[IndexBase Interface]
+    C --> D[DistanceComputer]
+    D --> E[L2Distance]
+    D --> F[InnerProductDistance]
+    D --> G[CosineDistance]
+    B --> H[ThreadPool]
+    B --> I[FileReader/Writer]
+    B --> J[Vector Storage]
+    H --> K[parallelFor]
+    E --> L[SIMD Operations]
+    F --> L
+```
 
 ## Build Requirements
 
@@ -47,10 +55,6 @@ ctest --output-on-failure
 - `HELIX_BUILD_CUDA` - Build CUDA kernels (default: OFF)
 - `HELIX_ENABLE_SANITIZERS` - Enable address/undefined sanitizers (default: OFF)
 
-## Project Status
-
-This project is under active development. Current milestone: Core infrastructure and IndexFlatL2 implementation.
-
 ## License
 
-MIT License - see LICENSE file for details
+MIT License
