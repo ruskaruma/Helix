@@ -54,23 +54,3 @@ This project is under active development. Current milestone: Core infrastructure
 ## License
 
 MIT License - see LICENSE file for details
-
-## Roadmap
-
-### 90 Days
-- C++20 skeleton repo
-- IndexFlatL2 implementation
-- pybind11 bindings for FlatL2
-- Small benchmark harness
-- CI + README
-
-### 6 Months
-- IVF + PQ + HNSW CPU implementations
-- Persistence and mmapped IO
-- Recall vs latency benchmarks
-- Packaged wheels
-
-### 12 Months
-- CUDA kernels for PQ ADC and brute-force
-- Distributed query prototype
-- Production-grade docs and k8s manifests
