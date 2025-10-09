@@ -7,10 +7,12 @@ namespace helix {
 
 float L2Distance::compute(const float* a,const float* b,dim_t dim) const
 {
+#ifdef __AVX2__
     if(dim>=8)
     {
         return computeSimd(a,b,dim);
     }
+#endif
     
     float sum=0.0f;
     for(dim_t i=0;i<dim;++i)
@@ -47,7 +49,13 @@ float L2Distance::computeSimd(const float* a,const float* b,dim_t dim) const
     
     return sum;
 #else
-    return compute(a,b,dim);
+    float sum=0.0f;
+    for(dim_t i=0;i<dim;++i)
+    {
+        float diff=a[i]-b[i];
+        sum+=diff*diff;
+    }
+    return sum;
 #endif
 }
 
@@ -64,10 +72,12 @@ void L2Distance::computeBatch(const float* queries,const float* database,idx_t n
 
 float InnerProductDistance::compute(const float* a,const float* b,dim_t dim) const
 {
+#ifdef __AVX2__
     if(dim>=8)
     {
         return computeSimd(a,b,dim);
     }
+#endif
     
     float sum=0.0f;
     for(dim_t i=0;i<dim;++i)
@@ -101,7 +111,12 @@ float InnerProductDistance::computeSimd(const float* a,const float* b,dim_t dim)
     
     return -sum;
 #else
-    return compute(a,b,dim);
+    float sum=0.0f;
+    for(dim_t i=0;i<dim;++i)
+    {
+        sum+=a[i]*b[i];
+    }
+    return -sum;
 #endif
 }
 
