@@ -1,5 +1,10 @@
 set(HELIX_SOURCES
     common/version.cpp
+    core/distance.cpp
+    core/memory.cpp
+    core/io.cpp
+    core/vector_utils.cpp
+    core/threading.cpp
 )
 
 add_library(helix SHARED ${HELIX_SOURCES})

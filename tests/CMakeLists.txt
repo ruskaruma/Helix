@@ -14,6 +14,9 @@ enable_testing()
 set(TEST_SOURCES
     test_main.cpp
     test_version.cpp
+    test_distance.cpp
+    test_vector_utils.cpp
+    test_threading.cpp
 )
 
 add_executable(helix_tests ${TEST_SOURCES})
