@@ -4,8 +4,7 @@
 #include<vector>
 #include<cstring>
 
-namespace helix {
-
+namespace helix{
 template<typename T>
 class Vector2D {
 public:
@@ -37,7 +36,6 @@ private:
     idx_t rows_=0;
     dim_t cols_=0;
 };
-
 void normalizeVectors(float* vectors,idx_t n,dim_t dim);
 void normalizeVector(float* vector,dim_t dim);
 
