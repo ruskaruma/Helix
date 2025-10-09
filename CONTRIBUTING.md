@@ -13,33 +13,6 @@ Thank you for your interest in contributing to Helix. This document provides gui
    cmake --build . -j
    ```
 
-## Coding Style
-
-Helix follows a specific coding style:
-
-- **Indentation**: 4 spaces (no tabs)
-- **Bracing**: K&R variant (opening brace on same line for functions, new line for control blocks)
-- **Spacing**: No spaces around = for assignments, no space after commas in templates
-- **Naming**: camelCase for variables/functions, PascalCase for classes
-- **Comments**: Sparse, lowercase inline comments only when necessary
-- **Headers**: No space between include and filename
-
-Example:
-```cpp
-class MyClass {
-public:
-    void myFunction(int value)
-    {
-        auto result=computeSomething(value);
-        if(result>0)
-        {
-            //handle positive case
-            processResult(result);
-        }
-    }
-};
-```
-
 ## Testing
 
 All new code should include unit tests. Run tests before submitting:
