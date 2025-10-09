@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-gcc:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++-12 ninja-build
+      
+      - name: Configure
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_COMPILER=g++-12 \
+            -DHELIX_BUILD_TESTS=ON \
+            -DHELIX_BUILD_BENCH=OFF \
+            -DHELIX_BUILD_PYTHON=OFF
+      
+      - name: Build
+        run: cmake --build build
+      
+      - name: Test
+        run: cd build && ctest --output-on-failure
+
+  build-clang:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake clang-15 ninja-build
+      
+      - name: Configure
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_COMPILER=clang++-15 \
+            -DHELIX_BUILD_TESTS=ON \
+            -DHELIX_BUILD_BENCH=OFF \
+            -DHELIX_BUILD_PYTHON=OFF
+      
+      - name: Build
+        run: cmake --build build
+      
+      - name: Test
+        run: cd build && ctest --output-on-failure
+
+  sanitizers:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++-12 ninja-build
+      
+      - name: Configure
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_CXX_COMPILER=g++-12 \
+            -DHELIX_BUILD_TESTS=ON \
+            -DHELIX_BUILD_BENCH=OFF \
+            -DHELIX_BUILD_PYTHON=OFF \
+            -DHELIX_ENABLE_SANITIZERS=ON
+      
+      - name: Build
+        run: cmake --build build
+      
+      - name: Test
+        run: cd build && ctest --output-on-failure
+
