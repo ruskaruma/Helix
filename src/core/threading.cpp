@@ -1,4 +1,5 @@
 #include"helix/core/threading.hpp"
+#include<chrono>
 
 namespace helix {
 
@@ -57,9 +58,12 @@ void ThreadPool::workerThread()
 
 void ThreadPool::waitAll()
 {
+    std::unique_lock<std::mutex> lock(mutex_);
     while(activeTasks_>0 || !tasks_.empty())
     {
-        std::this_thread::yield();
+        lock.unlock();
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
+        lock.lock();
     }
 }
 
