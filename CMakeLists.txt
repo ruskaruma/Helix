@@ -44,3 +44,5 @@ if(HELIX_BUILD_CUDA)
     add_subdirectory(cuda)
 endif()
 
+add_subdirectory(examples)
+

@@ -17,6 +17,7 @@ set(TEST_SOURCES
     test_distance.cpp
     test_vector_utils.cpp
     test_threading.cpp
+    test_index_flat.cpp
 )
 
 add_executable(helix_tests ${TEST_SOURCES})

@@ -5,6 +5,7 @@ set(HELIX_SOURCES
     core/io.cpp
     core/vector_utils.cpp
     core/threading.cpp
+    index/index_flat.cpp
 )
 
 add_library(helix SHARED ${HELIX_SOURCES})
