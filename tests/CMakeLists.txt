@@ -18,6 +18,8 @@ set(TEST_SOURCES
     test_vector_utils.cpp
     test_threading.cpp
     test_index_flat.cpp
+    test_index_pq.cpp
+    test_product_quantizer.cpp
     test_dataset.cpp
     test_metrics.cpp
 )
