@@ -6,6 +6,8 @@ set(HELIX_SOURCES
     core/vector_utils.cpp
     core/threading.cpp
     index/index_flat.cpp
+    benchmark/dataset.cpp
+    benchmark/metrics.cpp
 )
 
 add_library(helix SHARED ${HELIX_SOURCES})
