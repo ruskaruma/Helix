@@ -5,13 +5,17 @@ Vector similarity search library in C++20.
 ## Implemented
 
 - IndexFlat (exact brute-force search)
+- IndexPQ (product quantization with ADC)
 - L2, inner product, and cosine distance metrics
 - Parallel batch search
 - Index persistence (save/load)
+- Dataset loaders (fvecs/ivecs, synthetic generation)
+- Benchmarking infrastructure (recall, latency, throughput metrics)
+- Product quantization with k-means codebook training
 
 ## In Progress
 
-- Dataset loaders and benchmarking infrastructure
+- IndexIVF implementation
 
 ## Architecture
 
