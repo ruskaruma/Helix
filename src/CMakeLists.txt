@@ -9,6 +9,7 @@ set(HELIX_SOURCES
     index/index_flat.cpp
     index/index_pq.cpp
     index/index_ivf.cpp
+    index/index_hnsw.cpp
     quantization/product_quantizer.cpp
     benchmark/dataset.cpp
     benchmark/metrics.cpp

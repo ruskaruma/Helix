@@ -24,6 +24,7 @@ set(TEST_SOURCES
     test_metrics.cpp
     test_kmeans.cpp
     test_index_ivf.cpp
+    test_index_hnsw.cpp
 )
 
 add_executable(helix_tests ${TEST_SOURCES})
