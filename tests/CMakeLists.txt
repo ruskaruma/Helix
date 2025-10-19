@@ -22,6 +22,8 @@ set(TEST_SOURCES
     test_product_quantizer.cpp
     test_dataset.cpp
     test_metrics.cpp
+    test_kmeans.cpp
+    test_index_ivf.cpp
 )
 
 add_executable(helix_tests ${TEST_SOURCES})

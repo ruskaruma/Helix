@@ -9,7 +9,7 @@ namespace helix {
 
 class IndexBase {
   public:
-    explicit IndexBase(const IndexConfig &config) : config_(config), ntotal_(0) {}
+    explicit IndexBase(const IndexConfig &config) : config_(config), ntotal_(0), nextId_(0) {}
     virtual ~IndexBase()= default;
 
     virtual void train(const float *vectors, idx_t n)= 0;
@@ -30,6 +30,7 @@ class IndexBase {
   protected:
     IndexConfig config_;
     idx_t ntotal_;
+    idx_t nextId_;
     bool isTrained_= false;
 };
 

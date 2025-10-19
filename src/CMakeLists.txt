@@ -5,8 +5,10 @@ set(HELIX_SOURCES
     core/io.cpp
     core/vector_utils.cpp
     core/threading.cpp
+    core/kmeans.cpp
     index/index_flat.cpp
     index/index_pq.cpp
+    index/index_ivf.cpp
     quantization/product_quantizer.cpp
     benchmark/dataset.cpp
     benchmark/metrics.cpp

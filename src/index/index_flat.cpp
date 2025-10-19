@@ -7,7 +7,7 @@
 namespace helix {
 
 IndexFlat::IndexFlat(const IndexConfig& config)
-    : IndexBase(config),nextId_(0)
+    : IndexBase(config)
 {
     distance_=createDistanceComputer(config.metric);
 }

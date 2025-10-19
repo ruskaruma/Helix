@@ -30,7 +30,6 @@ class IndexFlat : public IndexBase
     std::vector<float> vectors_;
     std::vector<idx_t> ids_;
     std::unique_ptr<DistanceComputer> distance_;
-    idx_t nextId_;
 };
 
 } // namespace helix
