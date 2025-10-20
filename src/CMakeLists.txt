@@ -6,6 +6,7 @@ set(HELIX_SOURCES
     core/vector_utils.cpp
     core/threading.cpp
     core/kmeans.cpp
+    core/manifest.cpp
     index/index_flat.cpp
     index/index_pq.cpp
     index/index_ivf.cpp
