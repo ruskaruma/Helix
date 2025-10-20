@@ -24,4 +24,4 @@ class ManifestIO
     static Manifest read(const std::string& path);
 };
 
-} // namespace helix
+} 
