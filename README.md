@@ -16,23 +16,49 @@ Vector similarity search library in C++20.
 ## In Progress
 
 - IndexIVF implementation
+- IndexHNSW (graph-based ANN)
+- Persistence and mmapped IO improvements
+
+## Contributing (short)
+
+- open small, focused PRs with single-line commit messages
+- follow coding style in this repo (4-space indent, K&R bracing)
+- keep docs factual (no claims without tests)
+- add unit tests for new code paths
+- keep branches after merge
 
 ## Architecture
 
 ```mermaid
 graph TD
-    A[User Application] --> B[IndexFlat]
-    B --> C[IndexBase Interface]
-    C --> D[DistanceComputer]
-    D --> E[L2Distance]
-    D --> F[InnerProductDistance]
-    D --> G[CosineDistance]
-    B --> H[ThreadPool]
-    B --> I[FileReader/Writer]
-    B --> J[Vector Storage]
-    H --> K[parallelFor]
-    E --> L[SIMD Operations]
-    F --> L
+    app[User Application]
+    subgraph core
+        idxBase[IndexBase]
+        dist[Distance]
+        thread[ThreadPool]
+        io[FileReader/Writer]
+    end
+
+    subgraph indexes
+        flat[IndexFlat]
+        pq[IndexPQ]
+        ivf[IndexIVF]
+        hnsw[IndexHNSW]
+    end
+
+    app --> flat
+    app --> pq
+    app --> ivf
+    app --> hnsw
+
+    flat --> idxBase
+    pq --> idxBase
+    ivf --> idxBase
+    hnsw --> idxBase
+
+    idxBase --> dist
+    idxBase --> thread
+    idxBase --> io
 ```
 
 ## Build Requirements
