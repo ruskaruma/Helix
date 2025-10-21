@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.20)
 
+# Check if CUDA is available
+find_package(CUDAToolkit QUIET)
+if(NOT CUDAToolkit_FOUND)
+    message(STATUS "CUDA not found, skipping CUDA build")
+    return()
+endif()
+
 enable_language(CUDA)
 
 # CUDA configuration
@@ -21,7 +28,6 @@ set(CUDA_SOURCES
 add_library(helix_cuda STATIC ${CUDA_SOURCES})
 
 # Link with CUDA libraries
-find_package(CUDAToolkit REQUIRED)
 target_link_libraries(helix_cuda 
     PRIVATE 
     CUDA::cudart 

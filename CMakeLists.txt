@@ -10,7 +10,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 option(HELIX_BUILD_TESTS "Build unit tests" ON)
 option(HELIX_BUILD_BENCH "Build benchmarks" ON)
 option(HELIX_BUILD_PYTHON "Build Python bindings" ON)
-option(HELIX_BUILD_CUDA "Build CUDA kernels" ON)
+option(HELIX_BUILD_CUDA "Build CUDA kernels" OFF)
 option(HELIX_ENABLE_SANITIZERS "Enable address and undefined sanitizers" OFF)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
