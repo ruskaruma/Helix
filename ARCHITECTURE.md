@@ -63,17 +63,17 @@ graph TD
 ```mermaid
 graph LR
     subgraph "Exact Search"
-        flat[IndexFlat<br/>O(n×d)<br/>100% Accuracy]
+        flat["IndexFlat<br/>O(n×d)<br/>100% Accuracy"]
     end
     
     subgraph "Approximate Search"
-        pq[IndexPQ<br/>O(n×m)<br/>95-99% Accuracy]
-        ivf[IndexIVF<br/>O(nprobe×d)<br/>90-98% Accuracy]
-        hnsw[IndexHNSW<br/>O(log n×d)<br/>95-99% Accuracy]
+        pq["IndexPQ<br/>O(n×m)<br/>95-99% Accuracy"]
+        ivf["IndexIVF<br/>O(nprobe×d)<br/>90-98% Accuracy"]
+        hnsw["IndexHNSW<br/>O(log n×d)<br/>95-99% Accuracy"]
     end
     
     subgraph "GPU Acceleration"
-        cuda[CUDA Backend<br/>GPU Memory<br/>Async Operations]
+        cuda["CUDA Backend<br/>GPU Memory<br/>Async Operations"]
     end
     
     flat --> cuda
