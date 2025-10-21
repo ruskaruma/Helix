@@ -34,7 +34,6 @@ void KMeans::train(const float* data,idx_t n,dim_t dim)
     {
         bool changed=false;
 
-        //assign points to clusters
         for(idx_t i=0;i<n;++i)
         {
             idx_t bestCluster=0;

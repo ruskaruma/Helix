@@ -68,7 +68,6 @@ SearchResults IndexHNSW::search(const float* query,int k) const
 
     std::vector<idx_t> candidates=greedySearch(query,efSearch_);
     
-    //if greedySearch fails, fall back to searching all nodes
     if(candidates.empty())
     {
         for(idx_t i=0;i<static_cast<idx_t>(nodes_.size());++i)
@@ -134,7 +133,6 @@ void IndexHNSW::save(const std::string& path) const
     writer.write(&maxLevel_,1);
     writer.write(&entryPoint_,1);
 
-    //save nodes
     for(idx_t i=0;i<static_cast<idx_t>(nodes_.size());++i)
     {
         if(nodes_[i])
@@ -179,7 +177,6 @@ void IndexHNSW::load(const std::string& path)
     reader.read(&maxLevel_,1);
     reader.read(&entryPoint_,1);
 
-    //load nodes
     nodes_.clear();
     nodes_.resize(ntotal_);
 
@@ -238,7 +235,6 @@ void IndexHNSW::insertNode(const float* vector,idx_t id)
         return;
     }
 
-    //search for entry point
     std::vector<idx_t> candidates;
     if(entryPoint_>=0 && entryPoint_<static_cast<idx_t>(nodes_.size()))
     {
@@ -264,7 +260,6 @@ void IndexHNSW::connectNeighbors(HNSWNode* node,int level)
         candidates=greedySearch(node->data.data(),efConstruction_);
     }
 
-    //select m neighbors
     std::vector<std::pair<float,idx_t>> distances;
     for(idx_t candidate : candidates)
     {
