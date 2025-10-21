@@ -28,8 +28,19 @@ set(TEST_SOURCES
     test_manifest.cpp
 )
 
+# Add CUDA tests conditionally
+if(HELIX_BUILD_CUDA)
+    list(APPEND TEST_SOURCES test_cuda_basic.cpp)
+endif()
+
 add_executable(helix_tests ${TEST_SOURCES})
 target_link_libraries(helix_tests PRIVATE helix gtest gtest_main)
+
+# Link CUDA libraries if available
+if(HELIX_BUILD_CUDA)
+    target_link_libraries(helix_tests PRIVATE helix_cuda)
+    target_include_directories(helix_tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
+endif()
 
 include(GoogleTest)
 gtest_discover_tests(helix_tests)
