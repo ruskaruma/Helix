@@ -45,12 +45,11 @@ Vector similarity search library in C++20 with GPU acceleration and Python bindi
 - Threading infrastructure and parallel operations
 - Index persistence with manifest metadata
 - Python bindings for IndexFlat
-- Comprehensive test suite
+- CUDA GPU acceleration for IndexFlat
+- Comprehensive test suite (88 tests)
 - CI/CD pipeline with sanitizer support
 
 **In Progress:**
-- Enhanced persistence with copy-on-write snapshots
-- GPU acceleration via CUDA backends
 - Advanced Python bindings for all index types
 
 ## Contributing (short)
@@ -71,6 +70,7 @@ graph TD
         dist[Distance]
         thread[ThreadPool]
         io[FileReader/Writer]
+        manifest[Manifest]
     end
 
     subgraph indexes
@@ -80,19 +80,38 @@ graph TD
         hnsw[IndexHNSW]
     end
 
+    subgraph gpu
+        cuda[CUDA Backend]
+        cudaFlat[CudaIndexFlat]
+    end
+
+    subgraph python
+        pybind[Python Bindings]
+    end
+
     app --> flat
     app --> pq
     app --> ivf
     app --> hnsw
+    app --> cudaFlat
+    app --> pybind
 
     flat --> idxBase
     pq --> idxBase
     ivf --> idxBase
     hnsw --> idxBase
+    cudaFlat --> idxBase
 
     idxBase --> dist
     idxBase --> thread
     idxBase --> io
+    idxBase --> manifest
+
+    cudaFlat --> cuda
+    pybind --> flat
+    pybind --> pq
+    pybind --> ivf
+    pybind --> hnsw
 ```
 
 ## Quick Start

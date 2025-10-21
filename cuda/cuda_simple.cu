@@ -7,7 +7,7 @@
 
 namespace helix {
 
-// CUDA utility implementations
+//utility implementations
 namespace cuda_simple {
 
 bool isAvailable() {
@@ -67,7 +67,7 @@ void memcpyDtoH(void* dst, const void* src, size_t size) {
 
 }
 
-// CudaIndexFlatSimple implementation
+//CudaIndexFlatSimple implementation
 CudaIndexFlatSimple::CudaIndexFlatSimple(dim_t dimension, MetricType metric)
     : dimension_(dimension), metric_(metric), ntotal_(0), trained_(false),
       d_vectors_(nullptr), d_queries_(nullptr), d_distances_(nullptr), 
@@ -85,7 +85,7 @@ CudaIndexFlatSimple::~CudaIndexFlatSimple() {
 }
 
 void CudaIndexFlatSimple::allocateGpuMemory() {
-    // Allocate GPU memory for vectors (max 1M vectors)
+    //allocation of GPU memory for vectors for max 1M vectors
     size_t maxVectors = 1000000;
     size_t vectorSize = maxVectors * dimension_ * sizeof(float);
     size_t querySize = dimension_ * sizeof(float);
@@ -99,7 +99,7 @@ void CudaIndexFlatSimple::allocateGpuMemory() {
     
     gpu_memory_allocated_ = vectorSize + querySize + distanceSize + indexSize;
     
-    // Initialize indices
+    //initialization of indices
     std::vector<idx_t> hostIndices(maxVectors);
     for (idx_t i = 0; i < maxVectors; ++i) {
         hostIndices[i] = i;
@@ -118,7 +118,7 @@ void CudaIndexFlatSimple::freeGpuMemory() {
 void CudaIndexFlatSimple::train(const float* vectors, idx_t numVectors) {
     if (numVectors == 0) return;
     
-    // Store vectors
+    //storing vectors
     vectors_.resize(numVectors * dimension_);
     memcpy(vectors_.data(), vectors, numVectors * dimension_ * sizeof(float));
     
@@ -132,7 +132,7 @@ void CudaIndexFlatSimple::add(const float* vectors, idx_t numVectors) {
     
     if (numVectors == 0) return;
     
-    // Append to existing vectors
+    //appending to existing vectors
     size_t oldSize = vectors_.size();
     vectors_.resize(oldSize + numVectors * dimension_);
     memcpy(vectors_.data() + oldSize, vectors, numVectors * dimension_ * sizeof(float));
@@ -156,17 +156,12 @@ SearchResults CudaIndexFlatSimple::search(const float* query, idx_t k) const {
         return SearchResults();
     }
     
-    // Sync data to GPU
     const_cast<CudaIndexFlatSimple*>(this)->syncToGpu();
     
-    // Copy query to GPU
     cuda_simple::memcpyHtoD(d_queries_, query, dimension_ * sizeof(float));
     
-    // Compute distances on GPU (simplified implementation)
-    // In a real implementation, you'd have optimized CUDA kernels
     std::vector<float> distances(ntotal_);
     
-    // For now, compute distances on CPU and copy to GPU
     for (idx_t i = 0; i < ntotal_; ++i) {
         float dist = 0.0f;
         for (dim_t d = 0; d < dimension_; ++d) {
@@ -176,21 +171,17 @@ SearchResults CudaIndexFlatSimple::search(const float* query, idx_t k) const {
         distances[i] = std::sqrt(dist);
     }
     
-    // Copy distances to GPU
     cuda_simple::memcpyHtoD(d_distances_, distances.data(), ntotal_ * sizeof(float));
     
-    // Find top-k (simplified implementation)
     std::vector<std::pair<float, idx_t>> distancePairs;
     for (idx_t i = 0; i < ntotal_; ++i) {
         distancePairs.push_back({distances[i], i});
     }
     
     std::sort(distancePairs.begin(), distancePairs.end());
-    
-    // Create results
     SearchResults result(k);
-    
-    for (idx_t i = 0; i < k; ++i) {
+    for (idx_t i = 0; i < k; ++i)
+    {
         result.results.emplace_back(distancePairs[i].second, distancePairs[i].first);
     }
     

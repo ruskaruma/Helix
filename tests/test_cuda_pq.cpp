@@ -16,7 +16,6 @@ protected:
         config_ = helix::IndexConfig(128, helix::MetricType::L2, helix::IndexType::PQ);
         index_ = std::make_unique<helix::CudaIndexPQ>(config_);
         
-        // Generate test data
         dataset_ = helix::BenchmarkDataset::generateSynthetic(1000, 128, 0.0f, 1.0f);
         query_ = helix::BenchmarkDataset::generateSynthetic(1, 128, 0.0f, 1.0f);
     }
@@ -42,19 +41,16 @@ TEST_F(CudaPQTest, DeviceManagement) {
     int deviceCount = helix::cuda_utils::getDeviceCount();
     EXPECT_GT(deviceCount, 0);
     
-    // Test device switching
     if (deviceCount > 1) {
         index_->setDevice(1);
         EXPECT_EQ(index_->getDevice(), 1);
     }
     
-    // Test invalid device
     EXPECT_THROW(index_->setDevice(-1), helix::HelixException);
     EXPECT_THROW(index_->setDevice(deviceCount), helix::HelixException);
 }
 
 TEST_F(CudaPQTest, MemoryUsage) {
-    // Train and add data
     index_->train(dataset_.data.data(), dataset_.nrows);
     index_->add(dataset_.data.data(), dataset_.nrows);
     
@@ -211,7 +207,6 @@ TEST_F(CudaPQTest, MemoryLimits) {
 }
 
 TEST_F(CudaPQTest, ErrorHandling) {
-    // Test invalid k values
     index_->train(dataset_.data.data(), dataset_.nrows);
     index_->add(dataset_.data.data(), dataset_.nrows);
     

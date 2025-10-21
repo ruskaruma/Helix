@@ -138,14 +138,12 @@ void IndexIVF::save(const std::string& path) const
     writer.write(&nlist_,1);
     writer.write(&nprobe_,1);
 
-    //save quantizer centroids
     if(quantizer_->isTrained())
     {
         const auto& centroids=quantizer_->getCentroids();
         writer.write(centroids.data(),centroids.size());
     }
 
-    //save inverted lists
     for(int i=0;i<nlist_;++i)
     {
         idx_t listSize=invlists_[i].size();
@@ -179,15 +177,12 @@ void IndexIVF::load(const std::string& path)
     reader.read(&nlist_,1);
     reader.read(&nprobe_,1);
 
-    //load quantizer centroids
     std::vector<float> centroids(nlist_*config_.dimension);
     reader.read(centroids.data(),centroids.size());
 
-    //reconstruct quantizer
     quantizer_=std::make_unique<KMeans>(nlist_);
     quantizer_->setCentroids(centroids);
 
-    //load inverted lists
     invlists_.resize(nlist_);
     vectors_.resize(nlist_);
     ids_.resize(nlist_);
