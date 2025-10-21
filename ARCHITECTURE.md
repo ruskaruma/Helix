@@ -4,6 +4,162 @@
 
 Helix is a production-grade vector similarity search library built in C++20 with GPU acceleration and Python bindings. The architecture is designed for high performance, scalability, and extensibility.
 
+## System Architecture
+
+```mermaid
+graph TD
+    app[User Application]
+    subgraph core
+        idxBase[IndexBase]
+        dist[Distance]
+        thread[ThreadPool]
+        io[FileReader/Writer]
+        manifest[Manifest]
+    end
+
+    subgraph indexes
+        flat[IndexFlat]
+        pq[IndexPQ]
+        ivf[IndexIVF]
+        hnsw[IndexHNSW]
+    end
+
+    subgraph gpu
+        cuda[CUDA Backend]
+        cudaFlat[CudaIndexFlat]
+    end
+
+    subgraph python
+        pybind[Python Bindings]
+    end
+
+    app --> flat
+    app --> pq
+    app --> ivf
+    app --> hnsw
+    app --> cudaFlat
+    app --> pybind
+
+    flat --> idxBase
+    pq --> idxBase
+    ivf --> idxBase
+    hnsw --> idxBase
+    cudaFlat --> idxBase
+
+    idxBase --> dist
+    idxBase --> thread
+    idxBase --> io
+    idxBase --> manifest
+
+    cudaFlat --> cuda
+    pybind --> flat
+    pybind --> pq
+    pybind --> ivf
+    pybind --> hnsw
+```
+
+## Index Type Comparison
+
+```mermaid
+graph LR
+    subgraph "Exact Search"
+        flat[IndexFlat<br/>O(n×d)<br/>100% Accuracy]
+    end
+    
+    subgraph "Approximate Search"
+        pq[IndexPQ<br/>O(n×m)<br/>95-99% Accuracy]
+        ivf[IndexIVF<br/>O(nprobe×d)<br/>90-98% Accuracy]
+        hnsw[IndexHNSW<br/>O(log n×d)<br/>95-99% Accuracy]
+    end
+    
+    subgraph "GPU Acceleration"
+        cuda[CUDA Backend<br/>GPU Memory<br/>Async Operations]
+    end
+    
+    flat --> cuda
+    pq --> cuda
+    ivf --> cuda
+    hnsw --> cuda
+```
+
+## Data Flow Architecture
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Index as Index
+    participant GPU as CUDA Backend
+    participant CPU as CPU Core
+    
+    App->>Index: train(vectors)
+    Index->>CPU: k-means clustering
+    CPU-->>Index: centroids
+    
+    App->>Index: add(vectors)
+    Index->>CPU: encode vectors
+    CPU-->>Index: compressed codes
+    
+    App->>Index: search(query, k)
+    Index->>GPU: async search
+    GPU->>CPU: distance computation
+    CPU-->>GPU: results
+    GPU-->>Index: top-k results
+    Index-->>App: SearchResults
+```
+
+## Build System Architecture
+
+```mermaid
+graph TD
+    subgraph "Core Components"
+        core[Core Library]
+        dist[Distance Metrics]
+        thread[Threading]
+        io[I/O System]
+    end
+    
+    subgraph "Index Types"
+        flat[IndexFlat]
+        pq[IndexPQ]
+        ivf[IndexIVF]
+        hnsw[IndexHNSW]
+    end
+    
+    subgraph "Optional Components"
+        cuda[CUDA Backend]
+        python[Python Bindings]
+        tests[Test Suite]
+        bench[Benchmarks]
+    end
+    
+    subgraph "Build Targets"
+        lib[Static Library]
+        shared[Shared Library]
+        py[Python Module]
+        exe[Executables]
+    end
+    
+    core --> flat
+    core --> pq
+    core --> ivf
+    core --> hnsw
+    
+    flat --> cuda
+    pq --> cuda
+    ivf --> cuda
+    hnsw --> cuda
+    
+    flat --> python
+    pq --> python
+    ivf --> python
+    hnsw --> python
+    
+    cuda --> lib
+    python --> py
+    tests --> exe
+    bench --> exe
+```
+
 ## Core Components
 
 ### IndexBase

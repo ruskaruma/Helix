@@ -52,14 +52,6 @@ Vector similarity search library in C++20 with GPU acceleration and Python bindi
 **In Progress:**
 - Advanced Python bindings for all index types
 
-## Contributing (short)
-
-- open small, focused PRs with single-line commit messages
-- follow coding style in this repo (4-space indent, K&R bracing)
-- keep docs factual (no claims without tests)
-- add unit tests for new code paths
-- keep branches after merge
-
 ## Architecture
 
 ```mermaid
