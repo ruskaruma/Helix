@@ -61,26 +61,25 @@ graph TD
 ## Index Type Comparison
 
 ```mermaid
-graph LR
-    subgraph "Exact Search"
-        flat["IndexFlat<br/>O(n×d)<br/>100% Accuracy"]
-    end
-    
-    subgraph "Approximate Search"
-        pq["IndexPQ<br/>O(n×m)<br/>95-99% Accuracy"]
-        ivf["IndexIVF<br/>O(nprobe×d)<br/>90-98% Accuracy"]
-        hnsw["IndexHNSW<br/>O(log n×d)<br/>95-99% Accuracy"]
-    end
-    
-    subgraph "GPU Acceleration"
-        cuda["CUDA Backend<br/>GPU Memory<br/>Async Operations"]
-    end
+graph TB
+    flat[IndexFlat]
+    pq[IndexPQ]
+    ivf[IndexIVF]
+    hnsw[IndexHNSW]
+    cuda[CUDA Backend]
     
     flat --> cuda
     pq --> cuda
     ivf --> cuda
     hnsw --> cuda
 ```
+
+**Index Details:**
+- **IndexFlat**: O(n×d) complexity, 100% accuracy (exact search)
+- **IndexPQ**: O(n×m) complexity, 95-99% accuracy (approximate search)
+- **IndexIVF**: O(nprobe×d) complexity, 90-98% accuracy (approximate search)
+- **IndexHNSW**: O(log n×d) complexity, 95-99% accuracy (approximate search)
+- **CUDA Backend**: GPU memory management, async operations
 
 ## Data Flow Architecture
 
