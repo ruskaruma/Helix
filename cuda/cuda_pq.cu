@@ -17,12 +17,10 @@ CudaIndexPQ::CudaIndexPQ(const IndexConfig& config)
         throw HelixException("CUDA not available on this system");
     }
     
-    // Initialize CUDA
     cudaSetDevice(device_id_);
     cublasCreate(&cublas_handle_);
     cudaStreamCreate(&stream_);
     
-    // Calculate PQ parameters
     code_size_ = quantizer_.getCodeSize();
     subvector_size_ = dimension_ / quantizer_.getNumSubvectors();
     
@@ -47,7 +45,6 @@ void CudaIndexPQ::setDevice(int deviceId) {
     device_id_ = deviceId;
     cudaSetDevice(device_id_);
     
-    // Reallocate memory on new device
     freeGpuMemory();
     allocateGpuMemory();
     gpu_data_valid_ = false;

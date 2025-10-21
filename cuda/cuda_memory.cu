@@ -7,10 +7,9 @@
 namespace helix {
 namespace cuda_memory {
 
-// Memory pool for efficient GPU memory management
 class CudaMemoryPool {
 public:
-    CudaMemoryPool(size_t initialSize = 1024 * 1024 * 1024) // 1GB initial
+    CudaMemoryPool(size_t initialSize = 1024 * 1024 * 1024)
         : pool_size_(initialSize), allocated_size_(0) {
         cudaMalloc(&pool_ptr_, pool_size_);
         free_blocks_.push_back({pool_ptr_, pool_size_});
@@ -23,17 +22,14 @@ public:
     }
     
     void* allocate(size_t size) {
-        // Align size to 256 bytes for optimal performance
         size_t aligned_size = (size + 255) & ~255;
         
-        // Find best fit block
         auto it = std::find_if(free_blocks_.begin(), free_blocks_.end(),
                               [aligned_size](const Block& block) {
                                   return block.size >= aligned_size;
                               });
         
         if (it == free_blocks_.end()) {
-            // No suitable block found, need to expand pool
             expandPool(aligned_size);
             it = free_blocks_.begin();
         }
@@ -42,11 +38,9 @@ public:
         size_t remaining = it->size - aligned_size;
         
         if (remaining > 0) {
-            // Split block
             it->ptr = static_cast<char*>(it->ptr) + aligned_size;
             it->size = remaining;
         } else {
-            // Remove block
             free_blocks_.erase(it);
         }
         
